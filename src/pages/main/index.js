@@ -1,34 +1,39 @@
-import React, { Component } from 'react';
-import api from '../../services/api';
+import React, { Component } from 'react'
+import api from '../../services/api'
 
+import './styles.css';
 
 export default class Main extends Component {
+	state = {
+		products: [],
+	}
 
-  state = {
-    products: [],
+  //Método executado assim que o componente for mostrado em tela
+	componentDidMount() {
+		this.loadProducts()
+	}
 
-  };
- 
-  componentDidMount(){  //Método executado assim que o componente for mostrado em tela
-    this.loadProducts();
-  }
+	loadProducts = async () => {
+		const response = await api.get('/products')
 
-  loadProducts = async() => {
-    const response = await api.get('/products')
-
-    this.setState({products:response.data.docs})
-
-  };
-
+		this.setState({ products: response.data.docs })
+	}
 
 	render() {
-		return(
-      <div className="product-list">
-      {this.state.products.map(product => (
-        <h2 key={product._id}>{product.title}</h2>
-      ))}
-      
-      </div>
-    );
+    const {products} = this.state;
+
+		return (
+			<div className="product-list">
+				{products.map(product => (
+          <article key={product.id}>
+            <strong>{product.title}</strong>
+            <p>{product.description}</p>
+
+            <a href="!">Acessar</a>
+
+          </article>
+				))}
+			</div>
+		)
 	}
 }
