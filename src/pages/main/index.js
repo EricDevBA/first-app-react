@@ -5,6 +5,7 @@ import './styles.css'
 
 export default class Main extends Component {
 	state = {
+		// Estado inicial do Componente
 		products: [],
 		productInfo: [],
 		page: 1,
@@ -12,35 +13,42 @@ export default class Main extends Component {
 
 	//Método executado assim que o componente for mostrado em tela
 	componentDidMount() {
-		this.loadProducts()
+		this.loadProducts();
 	}
 
 	// Renderização dos produtos da API na view //
 	loadProducts = async (page = 1) => {
-		const response = await api.get(`/products?page=${page}`)
+		const response = await api.get(`/products?page=${page}`);
 
-		const { docs, ...productInfo } = response.data
+		const { docs, ...productInfo } = response.data;
 
-		this.setState({ products: docs, productInfo })
-	}
+		this.setState({ products: docs, productInfo, page }); //Mudança de estado
+	};
 
 	nextPage = () => {
 		// Listagem da Próxima página
-		const { page, productInfo } = this.state
+		const { page, productInfo } = this.state;
 
-		if (page === productInfo.page) return
+		if (page === productInfo.pages) return;
 
-		const pageNumber = page + 1
+		const pageNumber = page + 1;
 
-		this.loadProducts(pageNumber)
-	}
+		this.loadProducts(pageNumber);
+	};
 
 	prevPage = () => {
-		//Listagem da Página Anterior
-	}
+		// Listagem Página Anterior
+		const { page, productInfo } = this.state;
+
+		if (page === 1) return;
+
+		const pageNumber = page - 1;
+
+		this.loadProducts(pageNumber);
+	};
 
 	render() {
-		const { products } = this.state
+		const { products, page, productInfo } = this.state
 
 		return (
 			<div className="product-list">
@@ -53,8 +61,8 @@ export default class Main extends Component {
 					</article>
 				))}
 				<div className="actions">
-					<button onClick={this.prevPage}>Anterior</button>
-					<button onClick={this.nextPage}>Próxima</button>
+					<button disabled={page === 1} onClick={this.prevPage}>Anterior</button>
+					<button disabled={page === productInfo} onClick={this.nextPage}>Próxima</button>
 				</div>
 			</div>
 		)
