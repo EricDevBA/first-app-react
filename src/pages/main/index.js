@@ -15,28 +15,29 @@ export default class Main extends Component {
 		this.loadProducts()
 	}
 
+	// Renderização dos produtos da API na view //
 	loadProducts = async (page = 1) => {
 		const response = await api.get(`/products?page=${page}`)
 
-		const { docs, ...productInfo } = response.data;
+		const { docs, ...productInfo } = response.data
 
 		this.setState({ products: docs, productInfo })
-	};
-
-	nextPage = () => { // Listagem da Próxima página
-		const { page, productInfo } = this.state
-
-    if (page === productInfo.page) return
-    
-    const pageNumber = page + 1;
-
-    this.loadProducts(pageNumber);
-
 	}
 
-	prevPage = () => {  //Listagem da Página Anterior
+	nextPage = () => {
+		// Listagem da Próxima página
+		const { page, productInfo } = this.state
 
-  }
+		if (page === productInfo.page) return
+
+		const pageNumber = page + 1
+
+		this.loadProducts(pageNumber)
+	}
+
+	prevPage = () => {
+		//Listagem da Página Anterior
+	}
 
 	render() {
 		const { products } = this.state
