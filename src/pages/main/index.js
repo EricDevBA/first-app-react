@@ -4,12 +4,12 @@ import api from '../../services/api'
 import './styles.css'
 
 export default class Main extends Component {
+	// Estado inicial do Componente
 	state = {
-		// Estado inicial do Componente
 		products: [],
-		productInfo: [],
-		page: 1,
-	}
+		productInfo: {},
+		page: 1
+	};
 
 	//Método executado assim que o componente for mostrado em tela
 	componentDidMount() {
@@ -20,7 +20,7 @@ export default class Main extends Component {
 	loadProducts = async (page = 1) => {
 		const response = await api.get(`/products?page=${page}`);
 
-		const { docs, ...productInfo } = response.data;
+		const { docs,...productInfo } = response.data;
 
 		this.setState({ products: docs, productInfo, page }); //Mudança de estado
 	};
@@ -62,9 +62,9 @@ export default class Main extends Component {
 				))}
 				<div className="actions">
 					<button disabled={page === 1} onClick={this.prevPage}>Anterior</button>
-					<button disabled={page === productInfo} onClick={this.nextPage}>Próxima</button>
+					<button disabled={page === productInfo.pages} onClick={this.nextPage}>Próxima</button>
 				</div>
 			</div>
-		)
+		);
 	}
 }
